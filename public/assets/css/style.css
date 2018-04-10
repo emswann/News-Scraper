@@ -1,0 +1,16 @@
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.jumbotron {
+  background: url("../images/nyc.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.jumbotron h1 {
+  font-size: 5rem;
+}
+
+.jumbotron p {
+  font-size: 2rem;
+}
