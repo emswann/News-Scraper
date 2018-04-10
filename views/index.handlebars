@@ -1,3 +1,21 @@
+<div class="modal fade" id="scrapedModal" tabindex="-1" role="dialog" aria-labelledby="scrapedModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scrapedModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark primary-color scrolling-navbar">
   <a class="navbar-brand pt-0" href="#"><i class="fa fa-newspaper-o mr-1" aria-hidden="true"></i><strong>News Scraper</strong></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +44,7 @@
 </div>
 
 {{#if headlines}}
-<div class="container-fluid">
+<div class="container-fluid headlines" data-scraped={{scraped}}>
   {{#each headlines}}
   <div class="row headline mt-3 z-depth-4 rounded">
     <div class="col-md-12">

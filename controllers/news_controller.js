@@ -27,23 +27,29 @@ const addHeadline = headline =>
 const addHeadlines = headlines => 
   Promise.all(headlines.map(headline => addHeadline(headline)));
 
-const renderHeadlines = (req, res, saved, full=false) => {
+const renderHeadlines = (req, res, saved, count=0, full=false) => {
   db.News.find({saved: saved})
   .then(results => {
-    var renderObj = { headlines: results };
+    var renderObj = { headlines: results, scraped: count };
     if (!full) renderObj.layout = false;
-    var renderFile = saved ? "saved" : "index";
+    const renderFile = saved ? "saved" : "index";
 
     res.render(renderFile, renderObj);
   });
 };
 
+const countHeadlines = () => 
+  new Promise((resolve, reject) => {
+    db.News.count({ saved: false }, (error, result) => 
+      error ? reject(error) : resolve(result));
+  });
+
 module.exports = app => {
-  app.get("/", (req, res) => renderHeadlines(req, res, false, true));
+  app.get("/", (req, res) => renderHeadlines(req, res, false, 0, true));
 
-  app.get("/api/home", (req, res) => renderHeadlines(req, res, false)); 
+  app.get("/api/home", (req, res) => renderHeadlines(req, res, false, 0, false)); 
 
-  app.get("/api/saved", (req, res) => renderHeadlines(req, res, true));
+  app.get("/api/saved", (req, res) => renderHeadlines(req, res, true, 0, false));
 
   app.get("/api/scrape", (req, res) => {
     // need to count articles.
@@ -61,9 +67,21 @@ module.exports = app => {
         if (headline.title && headline.link) headlines.push(headline);
       });       
 
-      addHeadlines(headlines)
-      .then(() => renderHeadlines(req, res, false));
-    })
+      let preCount = 0;
+
+      countHeadlines()
+      .then((count) => {
+        preCount = count;
+        addHeadlines(headlines)
+        .then(() => {
+          countHeadlines()
+          .then((count) => {
+            const totalNew = count - preCount;
+            renderHeadlines(req, res, false, totalNew, false)
+          });
+        });
+      });
+    });
   });
 
   app.put("/api/save", (req, res) => {

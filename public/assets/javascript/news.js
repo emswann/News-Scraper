@@ -41,8 +41,17 @@ $(document).ready(() => {
     $.ajax(url, {
       type: "GET"
     })
-    .then(results => $(".content").html(results)
-    )
+    .then(results => {
+      $(".content").html(results);
+      const numScraped = $(".headlines").data("scraped");
+      const message = numScraped > 0 
+                      ? `${numScraped} new articles were added!`
+                      : `No new articles were added! Please check again later.`;
+
+      const modalTxt = $('<h3>').text(message);
+      $("#scrapedModal .modal-body").append(modalTxt);
+      $("#scrapedModal").modal("show");
+    })
     .fail(error => console.error(error));
   });
 
@@ -72,5 +81,10 @@ $(document).ready(() => {
     .then(results => $(this).closest(".headline").remove()
     )
     .fail(error => console.error(error));
+  });
+
+  $(document).on("click", ".hl-notes", function() {
+    const dataObj = { id: $(this).closest(".card").data("id") };
+    $("#modalNotesForm").modal("show");
   });
 });
