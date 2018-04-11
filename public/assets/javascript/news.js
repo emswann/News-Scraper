@@ -4,6 +4,33 @@ $(document).ready(() => {
     $(element).addClass("active");
   };
 
+  const getNotes = id => {
+    const url = `/api/notes/${id}`;
+    console.log("GET request: " + url);
+
+    $.ajax(url, {
+      type: "GET"
+    })
+    .then(results => {
+      $("#modalNotesForm .modal-body").html(results);
+
+      $("#modalNotesForm").modal("show");
+    })
+    .fail(error => console.error(error));
+  };
+
+  const addNoNotesMessage = () => {
+    const message = `No notes currently exist. Add the first one!`;
+    let divCard = $("<div>")
+                    .addClass("card")
+                    .append($("<div>").addClass("card-body")
+                              .append($("<p>")
+                                        .addClass("note card-text d-inline")
+                                        .text(message)));
+    $("#note-container .list-group").remove();
+    $("#note-container").prepend(divCard);
+  };
+  
   $(document).on("click", "#home a", () => {
     setActive("#home");
 
@@ -84,33 +111,17 @@ $(document).ready(() => {
   });
 
   $(document).on("click", ".hl-notes", function() {
-    const id = $(this).closest(".card").data("id");
-    const url = `/api/notes/${id}`;
-    console.log("GET request: " + url);
-
-    $.ajax(url, {
-      type: "GET"
-    })
-    .then(results => {
-      $("#modalNotesForm .modal-body").html(results);
-
-      $("#modalNotesForm").modal("show");
-    })
-    .fail(error => console.error(error));
+    getNotes($(this).closest(".card").data("id"));
   });
 
-  $(document).on("click", "#note-name, #note-body", function() {
-    $(this).text("");
-  });
-
-  $(document).on("click", ".add-notes", function() {
+  $(document).on("click", ".add-notes", () => {
     const author = $("#note-name").val().trim();
     const body   = $("#note-body").val().trim();
 
     if (author && body) {
       const dataObj = { author: author, body: body };
 
-      const id = $("#note-container").data("id");
+      const id = $("#add-note-form").data("id");
       const url = `/api/notes/add/${id}`;
       console.log("POST request: " + url);
 
@@ -118,7 +129,7 @@ $(document).ready(() => {
         type: "POST",
         data: dataObj
       })
-      .then(results => $("#modalNotesForm").modal("hide"))
+      .then(results => getNotes(id))
       .fail(error => console.error(error));
     }
   });
@@ -132,8 +143,13 @@ $(document).ready(() => {
       type: "DELETE",
       data: dataObj
     })
-    .then(results => $(this).closest(".list-group-item").remove()
-    )
+    .then(results => {
+      $(this).closest(".list-group-item").remove();
+      if (!($("#note-container").has(".list-group-item").length)) {
+        console.log("got here");
+        addNoNotesMessage();
+      }
+    })
     .fail(error => console.error(error));
   });
 });

@@ -40,8 +40,8 @@
   </div>
 </div>
 
-{{#if headlines}}
 <div class="container-fluid">
+{{#if headlines}}
   {{#each headlines}}
   <div class="row headline mt-3 z-depth-4 rounded">
     <div class="col-md-12">
@@ -61,5 +61,11 @@
     </div>
   </div>
   {{/each}}
+  {{else}}
+    <div class="card">
+      <div class="card-body text-center">
+        <p class="note card-text d-inline">No headlines currently exist. Please save articles to add them!</p>
+      </div>
+    </div>
+  {{/if}}
 </div>
-{{/if}}
