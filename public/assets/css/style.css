@@ -14,3 +14,7 @@
 .jumbotron p {
   font-size: 2rem;
 }
+
+.note, textarea {
+  font-size: 1.25rem!important;
+}

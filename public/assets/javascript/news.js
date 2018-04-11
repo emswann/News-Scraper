@@ -84,7 +84,56 @@ $(document).ready(() => {
   });
 
   $(document).on("click", ".hl-notes", function() {
+    const id = $(this).closest(".card").data("id");
+    const url = `/api/notes/${id}`;
+    console.log("GET request: " + url);
+
+    $.ajax(url, {
+      type: "GET"
+    })
+    .then(results => {
+      $("#modalNotesForm .modal-body").html(results);
+
+      $("#modalNotesForm").modal("show");
+    })
+    .fail(error => console.error(error));
+  });
+
+  $(document).on("click", "#note-name, #note-body", function() {
+    $(this).text("");
+  });
+
+  $(document).on("click", ".add-notes", function() {
+    const author = $("#note-name").val().trim();
+    const body   = $("#note-body").val().trim();
+
+    if (author && body) {
+      const dataObj = { author: author, body: body };
+
+      const id = $("#note-container").data("id");
+      const url = `/api/notes/add/${id}`;
+      console.log("POST request: " + url);
+
+      $.ajax(url, {
+        type: "POST",
+        data: dataObj
+      })
+      .then(results => $("#modalNotesForm").modal("hide"))
+      .fail(error => console.error(error));
+    }
+  });
+
+  $(document).on("click", ".note-delete", function() {
     const dataObj = { id: $(this).closest(".card").data("id") };
-    $("#modalNotesForm").modal("show");
+    const url = "/api/notes/delete";
+    console.log("DELETE request: " + url);
+
+    $.ajax(url, {
+      type: "DELETE",
+      data: dataObj
+    })
+    .then(results => $(this).closest(".list-group-item").remove()
+    )
+    .fail(error => console.error(error));
   });
 });
