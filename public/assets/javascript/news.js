@@ -23,9 +23,10 @@ $(document).ready(() => {
     const message = `No notes currently exist. Add the first one!`;
     let divCard = $("<div>")
                     .addClass("card")
-                    .append($("<div>").addClass("card-body")
+                    .append($("<div>")
+                              .addClass("card-body primary-color text-center")
                               .append($("<p>")
-                                        .addClass("note card-text d-inline")
+                                        .addClass("note card-text d-inline white-text font-bold")
                                         .text(message)));
     $("#note-container .list-group").remove();
     $("#note-container").prepend(divCard);

@@ -4,9 +4,9 @@
   {{#each notes}}
     <li class="list-group-item">
       <div class="card" data-id={{_id}}>
-        <div class="card-body">
-          <p class="note card-text d-inline">{{author}}: {{body}}</p>
-          <a class="note-delete btn btn-sm btn-danger mt-0 float-right" href="#">X</a>
+        <div class="card-body primary-color">
+          <p class="note card-text d-inline white-text font-bold">{{author}}: {{body}}</p>
+          <a class="note-delete btn btn-sm btn-danger mt-0 float-sm-right" href="#">X</a>
         </div>
       </div>
     </li>
@@ -14,8 +14,8 @@
   </ul>
 {{else}}
   <div class="card">
-    <div class="card-body">
-      <p class="note card-text d-inline">No notes currently exist. Add the first one!</p>
+    <div class="card-body primary-color text-center">
+      <p class="note card-text d-inline white-text font-bold">No notes currently exist. Add the first one!</p>
     </div>
   </div>
 {{/if}}

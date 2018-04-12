@@ -10,8 +10,8 @@
       <div class="modal-body mx-3">
       </div>
       <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="add-notes btn btn-secondary">Add Note</button>
+        <button type="button" class="btn btn-warning note-modal-btn" data-dismiss="modal">Close</button>
+        <button type="button" class="add-notes btn btn-secondary note-modal-btn">Add Note</button>
       </div>
     </div>
   </div>
@@ -49,8 +49,8 @@
         <div class="card-header primary-color">
           <h3>
             <a class="hl-link align-middle white-text" target=_blank href={{link}}>{{title}}</a>
-            <a class="hl-delete btn btn-danger float-right" href="#">DELETE FROM SAVED</a>
-            <a class="hl-notes btn btn-secondary float-right" href="#">ARTICLE NOTES</a>
+            <a class="hl-delete btn btn-danger float-lg-right" href="#">DELETE FROM SAVED</a>
+            <a class="hl-notes btn btn-secondary float-lg-right" href="#">ARTICLE NOTES</a>
           </h3>
         </div>
         <div class="card-body">
@@ -63,8 +63,8 @@
   {{/each}}
   {{else}}
     <div class="card">
-      <div class="card-body text-center">
-        <p class="note card-text d-inline">No headlines currently exist. Please save articles to add them!</p>
+      <div class="card-body primary-color text-center">
+        <p class="note card-text d-inline white-text font-bold">No headlines currently exist. Please save articles to add them!</p>
       </div>
     </div>
   {{/if}}
