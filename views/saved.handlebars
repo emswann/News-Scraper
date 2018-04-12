@@ -40,7 +40,7 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid headlines">
 {{#if headlines}}
   {{#each headlines}}
   <div class="row headline mt-3 z-depth-4 rounded">
@@ -50,7 +50,7 @@
           <h3>
             <a class="hl-link align-middle white-text" target=_blank href={{link}}>{{title}}</a>
             <div class = "float-right">
-              <a class="hl-delete btn btn-danger" href="#">DELETE FROM SAVED</a>
+              <a class="hl-nosave btn btn-danger" href="#">DELETE FROM SAVED</a>
               <a class="hl-notes btn btn-secondary" href="#">ARTICLE NOTES</a>
             </div>
           </h3>

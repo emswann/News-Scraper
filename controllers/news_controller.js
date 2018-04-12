@@ -106,9 +106,9 @@ module.exports = app => {
     .catch(error => res.json(error));
   });
 
-  app.put("/api/save", (req, res) => {
+  app.put("/api/update", (req, res) => {
     const id = req.body.id;
-    const update = { saved: true };
+    const update = { saved: req.body.saved };
     const options = { new: true, 
                       runValidators: true };
 
@@ -116,11 +116,11 @@ module.exports = app => {
     .then((error, result) => {
       let response = { id: id };
 
-      error ? response.error = "Error occurred"
-            : response.message = "Headline saved";
+      error ? response.error = `Error occurred`
+            : response.message = `Headline save status updated`;
 
       res.json(response);
-    });
+    })
   });
 
   app.delete("/api/delete", (req, res) => {
@@ -130,8 +130,8 @@ module.exports = app => {
     .then((error, result) => { 
       let response = { id: id };
 
-      error ? response.error = "Error occurred"
-            : response.message = "Headline deleted";
+      error ? response.error = `Error occurred`
+            : response.message = `Headline deleted`;
 
       res.json(response);
     });
@@ -144,8 +144,8 @@ module.exports = app => {
     .then((error, result) => { 
       let response = { id: id };
 
-      error ? response.error = "Error occurred"
-            : response.message = "Note deleted";
+      error ? response.error = `Error occurred`
+            : response.message = `Note deleted`;
 
       res.json(response);
     });

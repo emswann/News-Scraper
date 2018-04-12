@@ -19,15 +19,25 @@ $(document).ready(() => {
     .fail(error => console.error(error));
   };
 
+  const getMessageDiv = message =>
+    $("<div>")
+      .addClass("card")
+      .append($("<div>")
+                .addClass("card-body primary-color text-center")
+                .append($("<p>")
+                          .addClass("note card-text d-inline white-text font-bold")
+                          .text(message)));
+
+  const addNoHeadlinesMessage = message => {
+    let divCard = getMessageDiv(message);
+
+    $(".headlines").append(divCard);
+  };
+  
   const addNoNotesMessage = () => {
     const message = `No notes currently exist. Add the first one!`;
-    let divCard = $("<div>")
-                    .addClass("card")
-                    .append($("<div>")
-                              .addClass("card-body primary-color text-center")
-                              .append($("<p>")
-                                        .addClass("note card-text d-inline white-text font-bold")
-                                        .text(message)));
+    let divCard = getMessageDiv(message);
+
     $("#note-container .list-group").remove();
     $("#note-container").prepend(divCard);
   };
@@ -76,7 +86,7 @@ $(document).ready(() => {
                       ? `${numScraped} new articles were added!`
                       : `No new articles were added! Please check again later.`;
 
-      const modalTxt = $('<h3>').text(message);
+      const modalTxt = $('<h4>').text(message);
       $("#scrapedModal .modal-body").append(modalTxt);
       $("#scrapedModal").modal("show");
     })
@@ -84,16 +94,40 @@ $(document).ready(() => {
   });
 
   $(document).on("click", ".hl-save", function() {
-    const dataObj = { id: $(this).closest(".card").data("id") };
-    const url = "/api/save";
+    const dataObj = { id: $(this).closest(".card").data("id"),
+                      saved: true };
+    const url = "/api/update";
     console.log("PUT request: " + url);
 
     $.ajax(url, {
       type: "PUT",
       data: dataObj
     })
-    .then(results => $(this).closest(".headline").remove()
-    )
+    .then(results => {
+      $(this).closest(".headline").remove();
+      if (!($(".headlines").has(".headline").length)) {
+        addNoHeadlinesMessage(`No headlines currently exist. Please save articles to add them!`);
+      }
+    })
+    .fail(error => console.error(error));
+  });
+
+  $(document).on("click", ".hl-nosave", function() {
+    const dataObj = { id: $(this).closest(".card").data("id"),
+                      saved: false };
+    const url = "/api/update";
+    console.log("PUT request: " + url);
+
+    $.ajax(url, {
+      type: "PUT",
+      data: dataObj
+    })
+    .then(results => {
+      $(this).closest(".headline").remove();
+      if (!($(".headlines").has(".headline").length)) {
+        addNoHeadlinesMessage(`No headlines currently exist. Please save articles to add them!`);
+      }
+    })
     .fail(error => console.error(error));
   });
 
@@ -106,8 +140,12 @@ $(document).ready(() => {
       type: "DELETE",
       data: dataObj
     })
-    .then(results => $(this).closest(".headline").remove()
-    )
+    .then(results => {
+      $(this).closest(".headline").remove();
+      if (!($(".headlines").has(".headline").length)) {
+        addNoHeadlinesMessage(`No headlines currently exist. Please scrape articles to add them!`);
+      }
+    })
     .fail(error => console.error(error));
   });
 
@@ -147,7 +185,6 @@ $(document).ready(() => {
     .then(results => {
       $(this).closest(".list-group-item").remove();
       if (!($("#note-container").has(".list-group-item").length)) {
-        console.log("got here");
         addNoNotesMessage();
       }
     })
